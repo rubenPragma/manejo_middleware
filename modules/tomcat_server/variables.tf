@@ -16,14 +16,29 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "subnet_ids" {
-  description = "Lista de IDs de subredes para el Auto Scaling Group"
-  type        = list(string)
+variable "region" {
+  description = "Región de AWS (principal del servicio de CloudWatch Logs en la bucket policy)"
+  type        = string
 }
 
-variable "security_group_ids" {
-  description = "Lista de IDs de security groups para las instancias"
-  type        = list(string)
+variable "vpc_cidr" {
+  description = "CIDR de la VPC desde el que se permite tráfico a Tomcat"
+  type        = string
+}
+
+variable "bastion_cidr" {
+  description = "CIDR desde el que se permite SSH a las instancias"
+  type        = string
+}
+
+variable "subnet_id" {
+  description = "ID de la subred para el launch template y el Auto Scaling Group"
+  type        = string
+}
+
+variable "ami_id" {
+  description = "ID de la AMI para las instancias Tomcat"
+  type        = string
 }
 
 variable "instance_type" {
@@ -36,19 +51,39 @@ variable "key_name" {
   type        = string
 }
 
-variable "min_instance_count" {
+variable "app_bucket_name" {
+  description = "Nombre del bucket S3 al que las instancias tienen acceso de lectura/escritura"
+  type        = string
+}
+
+variable "asg_min_size" {
   description = "Número mínimo de instancias en el Auto Scaling Group"
   type        = number
 }
 
-variable "max_instance_count" {
+variable "asg_max_size" {
   description = "Número máximo de instancias en el Auto Scaling Group"
   type        = number
 }
 
-variable "desired_instance_count" {
+variable "asg_desired_capacity" {
   description = "Número deseado de instancias en el Auto Scaling Group"
   type        = number
+}
+
+variable "cpu_threshold_high" {
+  description = "Porcentaje de CPU que dispara el scale-up"
+  type        = number
+}
+
+variable "cpu_threshold_low" {
+  description = "Porcentaje de CPU que dispara el scale-down"
+  type        = number
+}
+
+variable "enable_monitoring" {
+  description = "Crear la alarma de memoria del ASG"
+  type        = bool
 }
 
 variable "tomcat_version" {
@@ -81,7 +116,7 @@ variable "alb_arn" {
   type        = string
 }
 
-variable "alb_target_group_arn" {
+variable "target_group_arn" {
   description = "ARN del Target Group para el ALB"
   type        = string
 }
@@ -116,8 +151,8 @@ variable "tags" {
 # Validación de parámetros para optimización de JVM
 locals {
   # Validación de parámetros de JVM
-  validate_jvm_heap_size = can(regex("^[0-9]+[mMgG]$", var.jvm_heap_size)) ? true : "Tamaño de heap JVM debe terminar con m, M, g o G"
-  validate_jvm_perm_size = can(regex("^[0-9]+[mMgG]$", var.jvm_perm_size)) ? true : "Tamaño de perm gen JVM debe terminar con m, M, g o G"
+  validate_jvm_heap_size     = can(regex("^[0-9]+[mMgG]$", var.jvm_heap_size)) ? true : "Tamaño de heap JVM debe terminar con m, M, g o G"
+  validate_jvm_perm_size     = can(regex("^[0-9]+[mMgG]$", var.jvm_perm_size)) ? true : "Tamaño de perm gen JVM debe terminar con m, M, g o G"
   validate_jvm_max_perm_size = can(regex("^[0-9]+[mMgG]$", var.jvm_max_perm_size)) ? true : "Tamaño máximo de perm gen JVM debe terminar con m, M, g o G"
 
   # Validación de algoritmo de garbage collection

@@ -8,10 +8,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-    cloudposse = {
-      source  = "cloudposse/cloudposse"
-      version = ">= 0.1.0"
-    }
   }
 }
 
@@ -30,12 +26,6 @@ provider "aws" {
   }
 }
 
-# Configuración adicional para módulos de CloudPosse
-provider "cloudposse" {
-  # Este proveedor no requiere configuración adicional
-  # pero se declara para asegurar compatibilidad con módulos
-}
-
 # Backend remoto para el estado de Terraform (se configurará en backend.tf)
 # La configuración específica del backend se define en backend.tf
 # para permitir diferentes configuraciones por ambiente
@@ -43,7 +33,7 @@ provider "cloudposse" {
 # Validación de variables para asegurar configuraciones válidas
 locals {
   validate_instance_type = contains([
-    "t3.micro", "t3.small", "t3.medium", "t3.large", 
+    "t3.micro", "t3.small", "t3.medium", "t3.large",
     "m5.large", "m5.xlarge", "m5.2xlarge", "c5.large", "c5.xlarge"
   ], var.instance_type) ? true : "Tipo de instancia no soportado"
 

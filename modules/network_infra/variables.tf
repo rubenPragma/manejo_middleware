@@ -67,6 +67,62 @@ variable "tags" {
   default     = {}
 }
 
+variable "region" {
+  description = "Región de AWS (para los service names de los VPC endpoints)"
+  type        = string
+}
+
+variable "office_cidr" {
+  description = "CIDR desde el que se permite SSH al bastion"
+  type        = string
+}
+
+variable "key_name" {
+  description = "Nombre del key pair para el bastion"
+  type        = string
+}
+
+variable "flow_logs_bucket_arn" {
+  description = "ARN del bucket S3 destino de los VPC Flow Logs"
+  type        = string
+}
+
+variable "enable_https" {
+  description = "Crear el listener HTTPS en el ALB del módulo"
+  type        = bool
+  default     = false
+}
+
+variable "ssl_certificate_arn" {
+  description = "ARN del certificado ACM para el listener HTTPS"
+  type        = string
+  default     = null
+}
+
+variable "enable_bastion" {
+  description = "Crear la instancia bastion en la subred pública"
+  type        = bool
+  default     = false
+}
+
+variable "bastion_ami" {
+  description = "AMI del bastion (requerida si enable_bastion = true)"
+  type        = string
+  default     = null
+}
+
+variable "bastion_instance_type" {
+  description = "Tipo de instancia del bastion"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "enable_private_dns" {
+  description = "Crear la zona privada de Route 53"
+  type        = bool
+  default     = false
+}
+
 variable "http_cidr_blocks" {
   description = "Bloques CIDR permitidos para acceso HTTP/HTTPS"
   type        = list(string)

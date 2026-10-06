@@ -1,18 +1,9 @@
+# Backend remoto S3 con configuración parcial: un bloque backend no admite
+# variables, así que bucket, key, región y tabla de bloqueo se inyectan por
+# ambiente en el init:
+#   terraform init -backend-config=environments/<env>/backend.hcl
 terraform {
-  backend "s3" {
-    bucket         = "terraform-state-${var.project_name}-${var.environment}"
-    key            = "infrastructure/terraform.tfstate"
-    region         = var.aws_region
-    encrypt        = true
-    dynamodb_table = "terraform-state-lock-${var.environment}"
-
-    versioning = true
-    acl        = "bucket-owner-full-control"
-
-    lifecycle {
-      prevent_destroy = true
-    }
-  }
+  backend "s3" {}
 }
 
 resource "aws_s3_bucket" "terraform_state" {

@@ -8,6 +8,11 @@ output "autoscaling_group_name" {
   value       = aws_autoscaling_group.tomcat_asg.name
 }
 
+output "autoscaling_group_id" {
+  description = "ID del Auto Scaling Group de Tomcat"
+  value       = aws_autoscaling_group.tomcat_asg.id
+}
+
 output "autoscaling_group_arn" {
   description = "ARN del Auto Scaling Group de Tomcat"
   value       = aws_autoscaling_group.tomcat_asg.arn

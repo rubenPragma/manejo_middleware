@@ -156,9 +156,9 @@ resource "aws_launch_template" "tomcat_lt" {
   }
 
   metadata_options {
-    http_endpoint               = "enabled"
-    http_tokens                 = "required"
-    instance_metadata_tags      = "enabled"
+    http_endpoint          = "enabled"
+    http_tokens            = "required"
+    instance_metadata_tags = "enabled"
   }
 
   monitoring {
@@ -173,12 +173,12 @@ resource "aws_launch_template" "tomcat_lt" {
 }
 
 resource "aws_autoscaling_group" "tomcat_asg" {
-  name                = "${local.name_prefix}-asg"
-  vpc_zone_identifier = [var.subnet_id]
-  desired_capacity    = var.asg_desired_capacity
-  min_size            = var.asg_min_size
-  max_size            = var.asg_max_size
-  health_check_type   = "ELB"
+  name                      = "${local.name_prefix}-asg"
+  vpc_zone_identifier       = [var.subnet_id]
+  desired_capacity          = var.asg_desired_capacity
+  min_size                  = var.asg_min_size
+  max_size                  = var.asg_max_size
+  health_check_type         = "ELB"
   health_check_grace_period = 300
 
   launch_template {
@@ -318,7 +318,7 @@ resource "aws_s3_bucket_policy" "allow_cloudwatch_logs" {
         Resource = "arn:aws:s3:::${aws_s3_bucket.tomcat_logs.id}/*"
         Condition = {
           StringEquals = {
-            "s3:x-amz-acl"    = "bucket-owner-full-control",
+            "s3:x-amz-acl"      = "bucket-owner-full-control",
             "aws:SourceAccount" = data.aws_caller_identity.current.account_id
           }
         }

@@ -3,6 +3,11 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
 }
 
+output "vpc_cidr" {
+  description = "Bloque CIDR de la VPC"
+  value       = module.vpc.vpc_cidr_block
+}
+
 output "public_subnet_ids" {
   description = "IDs de las subredes públicas"
   value       = module.vpc.public_subnets
@@ -20,17 +25,17 @@ output "private_subnet_arns" {
 
 output "alb_arn" {
   description = "ARN del Application Load Balancer"
-  value       = aws_lb.alb.arn
+  value       = aws_lb.main.arn
 }
 
 output "alb_dns_name" {
   description = "Nombre DNS del ALB para acceso externo"
-  value       = aws_lb.alb.dns_name
+  value       = aws_lb.main.dns_name
 }
 
 output "alb_zone_id" {
   description = "Zone ID del ALB para configuración de Route 53"
-  value       = aws_lb.alb.zone_id
+  value       = aws_lb.main.zone_id
 }
 
 output "alb_target_group_arn" {
@@ -40,17 +45,12 @@ output "alb_target_group_arn" {
 
 output "security_group_alb_id" {
   description = "ID del security group del ALB"
-  value       = aws_security_group.alb.id
-}
-
-output "security_group_tomcat_id" {
-  description = "ID del security group para instancias Tomcat"
-  value       = aws_security_group.tomcat.id
+  value       = aws_security_group.alb_sg.id
 }
 
 output "nat_gateway_ips" {
   description = "IPs elásticas de los NAT Gateways para salida a internet"
-  value       = [for ngw in aws_nat_gateway.main : ngw.elastic_allocation_id]
+  value       = [for ngw in aws_nat_gateway.main : ngw.public_ip]
 }
 
 output "igw_id" {

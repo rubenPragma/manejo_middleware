@@ -1,0 +1,2 @@
+# Los scripts se ejecutan en Linux (user_data de EC2): siempre LF
+*.sh text eol=lf

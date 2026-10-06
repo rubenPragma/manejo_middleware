@@ -16,8 +16,8 @@ module "vpc" {
   cidr = var.vpc_cidr
 
   azs             = var.availability_zones
-  public_subnets  = var.public_subnet_cidrs
-  private_subnets = var.private_subnet_cidrs
+  public_subnets  = var.public_subnets_cidr
+  private_subnets = var.private_subnets_cidr
 
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -81,7 +81,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-  count = length(var.private_subnet_cidrs)
+  count = length(var.private_subnets_cidr)
 
   subnet_id      = module.vpc.private_subnets[count.index]
   route_table_id = aws_route_table.private[count.index % length(var.availability_zones)].id
@@ -176,8 +176,8 @@ resource "aws_lb_target_group" "tomcat" {
   }
 
   stickiness {
-    enabled  = true
-    type     = "lb_cookie"
+    enabled         = true
+    type            = "lb_cookie"
     cookie_duration = 86400
   }
 

@@ -40,24 +40,12 @@ output "alb_arn" {
 
 output "alb_security_group_id" {
   description = "ID del security group del ALB"
-  value       = module.network_infra.alb_security_group_id
+  value       = module.network_infra.security_group_alb_id
 }
 
 output "target_group_arn" {
   description = "ARN del target group de Tomcat"
   value       = aws_lb_target_group.tomcat.arn
-}
-
-output "tomcat_instance_id" {
-  description = "ID de la instancia EC2 de Tomcat (solo si no hay ASG)"
-  value       = var.enable_auto_scaling ? "" : module.tomcat_server.instance_id
-  sensitive  = false
-}
-
-output "tomcat_instance_private_ip" {
-  description = "IP privada de la instancia EC2 de Tomcat"
-  value       = var.enable_auto_scaling ? "" : module.tomcat_server.instance_private_ip
-  sensitive  = false
 }
 
 output "tomcat_security_group_id" {
@@ -107,7 +95,7 @@ output "account_id" {
 
 output "region" {
   description = "Región de AWS"
-  value       = var.aws_region
+  value       = var.region
 }
 
 output "environment" {
@@ -123,11 +111,10 @@ output "tomcat_url" {
 output "jvm_configuration" {
   description = "Configuración JVM aplicada al servidor Tomcat"
   value = {
-    heap_size            = var.jvm_heap_size
-    gc_type              = var.jvm_gc_type
-    metaspace_size       = var.jvm_metaspace_size
-    thread_stack_size    = var.jvm_thread_stack_size
-    gc_log_enabled       = var.jvm_gc_log_enabled
+    heap_size     = var.jvm_heap_size
+    gc_algorithm  = var.jvm_gc_algorithm
+    perm_size     = var.jvm_perm_size
+    max_perm_size = var.jvm_max_perm_size
   }
   sensitive = false
 }
@@ -135,11 +122,9 @@ output "jvm_configuration" {
 output "tomcat_connector_config" {
   description = "Configuración del connector de Tomcat"
   value = {
-    max_threads          = var.tomcat_max_threads
-    min_spare_threads    = var.tomcat_min_spare_threads
-    connection_timeout   = var.tomcat_connection_timeout
-    accept_count         = var.tomcat_accept_count
-    compression_enabled  = var.tomcat_enable_compression
+    version     = var.tomcat_version
+    port        = var.tomcat_port
+    ssl_enabled = var.tomcat_ssl_enabled
   }
   sensitive = false
 }
